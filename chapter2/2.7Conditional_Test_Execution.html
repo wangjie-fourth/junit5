@@ -365,6 +365,96 @@
 <blockquote>
 <p>&#x5728;&#x672A;&#x6765;&#x5F97;<code>JUnit Jupiter</code>&#x53D1;&#x884C;&#x7248;&#xFF0C;<code>@EnabledIf</code>&#x548C;<code>@DisabledIf</code>&#x5C06;&#x4F1A;&#x88AB;&#x5E9F;&#x5F03;&#x79FB;&#x9664;&#x3002;</p>
 </blockquote>
+<p><code>JUnit Jupiter</code>&#x901A;&#x8FC7;<code>@EnabledIf</code>&#x6216;<code>DisabledIf</code>&#x6CE8;&#x89E3;&#x4E2D;&#x7684;&#x6267;&#x884C;&#x811A;&#x672C;&#x6765;&#x542F;&#x52A8;&#x6216;&#x8005;&#x7981;&#x6B62;&#x4E00;&#x4E2A;&#x5BB9;&#x5668;&#x6216;&#x8005;&#x6D4B;&#x8BD5;&#x3002;&#x5176;</p>
+<p>&#x811A;&#x672C;&#x53EF;&#x4EE5;&#x7528;<code>JavaScript</code>&#x3001;<code>Groovy</code>&#x6216;&#x4EFB;&#x4F55;&#x5176;&#x4ED6;&#x652F;&#x6301;<code>Java</code>&#x811A;&#x672C;<code>API</code>(&#x7531;<code>JSR 223</code>&#x5B9A;&#x4E49;)&#x7684;&#x811A;&#x672C;&#x8BED;&#x8A00;&#x7F16;&#x5199;&#x3002;</p>
+<blockquote>
+<p>&#x5982;&#x679C;&#x4F60;&#x60F3;&#x5199;&#x5173;&#x6CE8;&#x4E8E;&#x6307;&#x5B9A;&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x3001;<code>JRE</code>&#x7248;&#x672C;&#x3001;<code>JVM</code>&#x7CFB;&#x7EDF;&#x53D8;&#x91CF;&#x548C;&#x7279;&#x5B9A;&#x5F97;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x5F97;&#x811A;&#x672C;&#xFF0C;&#x4F60;&#x5E94;&#x8BE5;&#x4F7F;&#x7528;&#x4E13;&#x6CE8;&#x4E8E;&#x8FD9;&#x4E2A;&#x76EE;&#x7684;&#x5F97;&#x6CE8;&#x89E3;&#x3002;&#x8BE6;&#x7EC6;&#x4FE1;&#x606F;&#x53EF;&#x4EE5;&#x4ECE;&#x4E4B;&#x524D;&#x5F97;&#x7AE0;&#x8282;&#x53EF;&#x4EE5;&#x770B;&#x5230;&#x3002;</p>
+<p>&#x5982;&#x679C;&#x60A8;&#x53D1;&#x73B0;&#x60A8;&#x5728;&#x591A;&#x6B21;&#x4F7F;&#x7528;&#x76F8;&#x540C;&#x811A;&#x672C;&#xFF0C;&#x60A8;&#x5E94;&#x8BE5;&#x8003;&#x8651;&#x5199;&#x4E00;&#x4E2A;&#x4E13;&#x6CE8;&#x6761;&#x4EF6;&#x6267;&#x884C;&#x6269;&#x5C55;&#x63D2;&#x4EF6;&#xFF0C;&#x8FD9;&#x6837;&#x53EF;&#x4EE5;&#x66F4;&#x5757;&#x3001;&#x7C7B;&#x578B;&#x66F4;&#x5B89;&#x5168;&#x3001;&#x66F4;&#x5BB9;&#x6613;&#x7EF4;&#x62A4;&#x3002;</p>
+</blockquote>
+<pre><code class="lang-java"><span class="hljs-meta">@Test</span> <span class="hljs-comment">// Static JavaScript expression.</span>
+<span class="hljs-meta">@EnabledIf</span>(<span class="hljs-string">&quot;2 * 3 == 6&quot;</span>)
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">willBeExecuted</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-meta">@RepeatedTest</span>(<span class="hljs-number">10</span>) <span class="hljs-comment">// Dynamic JavaScript expression.</span>
+<span class="hljs-meta">@DisabledIf</span>(<span class="hljs-string">&quot;Math.random() &lt; 0.314159&quot;</span>)
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">mightNotBeExecuted</span><span class="hljs-params">()</span> </span>{
+    <span class="hljs-comment">// ...</span>
+}
+
+<span class="hljs-meta">@Test</span> <span class="hljs-comment">// Regular expression testing bound system property.</span>
+<span class="hljs-meta">@DisabledIf</span>(<span class="hljs-string">&quot;/32/.test(systemProperty.get(&apos;os.arch&apos;))&quot;</span>)
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">disabledOn32BitArchitectures</span><span class="hljs-params">()</span> </span>{
+    assertFalse(System.getProperty(<span class="hljs-string">&quot;os.arch&quot;</span>).contains(<span class="hljs-string">&quot;32&quot;</span>));
+}
+
+<span class="hljs-meta">@Test</span>
+<span class="hljs-meta">@EnabledIf</span>(<span class="hljs-string">&quot;&apos;CI&apos; == systemEnvironment.get(&apos;ENV&apos;)&quot;</span>)
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">onlyOnCiServer</span><span class="hljs-params">()</span> </span>{
+    assertTrue(<span class="hljs-string">&quot;CI&quot;</span>.equals(System.getenv(<span class="hljs-string">&quot;ENV&quot;</span>)));
+}
+
+<span class="hljs-meta">@Test</span> <span class="hljs-comment">// Multi-line script, custom engine name and custom reason.</span>
+<span class="hljs-meta">@EnabledIf</span>(value = {
+                <span class="hljs-string">&quot;load(&apos;nashorn:mozilla_compat.js&apos;)&quot;</span>,
+                <span class="hljs-string">&quot;importPackage(java.time)&quot;</span>,
+                <span class="hljs-string">&quot;&quot;</span>,
+                <span class="hljs-string">&quot;var today = LocalDate.now()&quot;</span>,
+                <span class="hljs-string">&quot;var tomorrow = today.plusDays(1)&quot;</span>,
+                <span class="hljs-string">&quot;tomorrow.isAfter(today)&quot;</span>
+            },
+            engine = <span class="hljs-string">&quot;nashorn&quot;</span>,
+            reason = <span class="hljs-string">&quot;Self-fulfilling: {result}&quot;</span>)
+<span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">theDayAfterTomorrow</span><span class="hljs-params">()</span> </span>{
+    LocalDate today = LocalDate.now();
+    LocalDate tomorrow = today.plusDays(<span class="hljs-number">1</span>);
+    assertTrue(tomorrow.isAfter(today));
+}
+</code></pre>
+<h5 id="&#x811A;&#x672C;&#x7ED1;&#x5B9A;">&#x811A;&#x672C;&#x7ED1;&#x5B9A;</h5>
+<p>&#x4EE5;&#x4E0B;&#x540D;&#x79F0;&#x7ED1;&#x5B9A;&#x5230;&#x6BCF;&#x4E2A;&#x811A;&#x672C;&#x4E0A;&#x4E0B;&#x6587;&#xFF0C;&#x56E0;&#x6B64;&#x53EF;&#x4EE5;&#x5728;&#x811A;&#x672C;&#x4E2D;&#x4F7F;&#x7528;&#x3002;&#x8BBF;&#x95EE;&#x5668;&#x901A;&#x8FC7;&#x7B80;&#x5355;&#x7684;<code>String get(String name)</code>&#x65B9;&#x6CD5;&#x63D0;&#x4F9B;&#x5BF9;&#x7C7B;&#x4F3C;&#x4E8E;&#x6620;&#x5C04;&#x7684;&#x7ED3;&#x6784;&#x7684;&#x8BBF;&#x95EE;&#x3002;</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">&#x540D;&#x79F0;</th>
+<th style="text-align:left">&#x7C7B;&#x578B;</th>
+<th>&#x63CF;&#x8FF0;</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">systemEnvironment</td>
+<td style="text-align:left">accessor</td>
+<td>&#x64CD;&#x4F5C;&#x7CFB;&#x7EDF;&#x73AF;&#x5883;&#x53D8;&#x91CF;&#x8BBF;&#x95EE;&#x5668;</td>
+</tr>
+<tr>
+<td style="text-align:left">systemProperty</td>
+<td style="text-align:left">accessor</td>
+<td>JVM&#x7CFB;&#x7EDF;&#x5C5E;&#x6027;&#x8BBF;&#x95EE;&#x5668;</td>
+</tr>
+<tr>
+<td style="text-align:left">junitConfigurationParameter</td>
+<td style="text-align:left">accessor</td>
+<td>&#x914D;&#x7F6E;&#x53C2;&#x6570;&#x8BBF;&#x95EE;&#x5668;</td>
+</tr>
+<tr>
+<td style="text-align:left">junitDisplayName</td>
+<td style="text-align:left">String</td>
+<td>&#x663E;&#x793A;&#x6D4B;&#x8BD5;&#x6216;&#x8005;&#x5BB9;&#x5668;&#x5F97;&#x540D;&#x79F0;</td>
+</tr>
+<tr>
+<td style="text-align:left">junitTags</td>
+<td style="text-align:left">Set<string></string></td>
+<td>&#x6240;&#x6709;&#x6807;&#x5FD7;&#x6D4B;&#x8BD5;&#x6216;&#x8005;&#x5BB9;&#x5668;&#x5F97;tag</td>
+</tr>
+<tr>
+<td style="text-align:left">junitUniqueId</td>
+<td style="text-align:left">String</td>
+<td>&#x6D4B;&#x8BD5;&#x6216;&#x5BB9;&#x5668;&#x5F97;&#x552F;&#x4E00;ID</td>
+</tr>
+</tbody>
+</table>
 
                                 
                                 </section>
@@ -404,7 +494,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"条件执行测试","level":"2.2.7","depth":2,"previous":{"title":"禁止测试","level":"2.2.6","depth":2,"path":"chapter2/2.6Disabling_Tests.md","ref":"./chapter2/2.6Disabling_Tests.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/2.7Conditional_Test_Execution.md","mtime":"2019-12-04T08:25:19.326Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-04T08:25:37.776Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"条件执行测试","level":"2.2.7","depth":2,"previous":{"title":"禁止测试","level":"2.2.6","depth":2,"path":"chapter2/2.6Disabling_Tests.md","ref":"./chapter2/2.6Disabling_Tests.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/2.7Conditional_Test_Execution.md","mtime":"2019-12-04T09:01:15.459Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-04T09:01:32.810Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
