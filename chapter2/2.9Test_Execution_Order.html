@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>编写测试 · GitBook</title>
+        <title>测试执行顺序 · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,10 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="2.1Annotations.html" />
+    <link rel="next" href="2.10Test_Instance_Lifecycle.html" />
     
     
-    <link rel="prev" href="../chapter1/1.0Overview.html" />
+    <link rel="prev" href="2.8Tagging_and_Filtering.html" />
     
 
     </head>
@@ -122,7 +122,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="2.2" data-path="2.0Writing_Tests.html">
+        <li class="chapter " data-level="2.2" data-path="2.0Writing_Tests.html">
             
                 <a href="2.0Writing_Tests.html">
             
@@ -240,7 +240,7 @@
             
         </li>
     
-        <li class="chapter " data-level="2.2.9" data-path="2.9Test_Execution_Order.html">
+        <li class="chapter active" data-level="2.2.9" data-path="2.9Test_Execution_Order.html">
             
                 <a href="2.9Test_Execution_Order.html">
             
@@ -314,7 +314,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >编写测试</a>
+        <a href=".." >测试执行顺序</a>
     </h1>
 </div>
 
@@ -329,18 +329,40 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <p>&#x63A5;&#x4E0B;&#x6765;&#x7684;&#x6848;&#x4F8B;&#x5C06;&#x63D0;&#x4F9B;&#x4E86;&#x5728;<code>JUnit Jupiter</code>&#x5199;&#x6D4B;&#x8BD5;&#x7684;&#x57FA;&#x672C;&#x8981;&#x6C42;&#x3002;&#x8FD9;&#x7AE0;&#x7684;&#x5269;&#x4F59;&#x90E8;&#x5206;&#x5C06;&#x5728;&#x6240;&#x6709;&#x53EF;&#x7528;&#x7684;&#x5206;&#x652F;&#x4E0A;&#x63D0;&#x4F9B;&#x66F4;&#x52A0;&#x8BE6;&#x7EC6;&#x7684;&#x7EC6;&#x8282;&#x3002;</p>
-<pre><code class="lang-java"><span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.junit.jupiter.api.Assertions.assertEquals;
-<span class="hljs-keyword">import</span> example.util.Calculator;
+                                <h3 id="29&#x3001;&#x6D4B;&#x8BD5;&#x6267;&#x884C;&#x987A;&#x5E8F;">2.9&#x3001;&#x6D4B;&#x8BD5;&#x6267;&#x884C;&#x987A;&#x5E8F;</h3>
+<p>&#x9ED8;&#x8BA4;&#x60C5;&#x51B5;&#x4E0B;&#xFF0C;&#x6D4B;&#x8BD5;&#x65B9;&#x6CD5;&#x4F1A;&#x6839;&#x636E;&#x67D0;&#x79CD;&#x786E;&#x5B9A;&#x4F46;&#x4E0D;&#x660E;&#x663E;&#x5F97;&#x987A;&#x5E8F;&#x7B97;&#x6CD5;&#x6267;&#x884C;&#x3002;&#x8FD9;&#x4FDD;&#x8BC1;&#x4E86;&#x968F;&#x540E;&#x5F97;&#x6D4B;&#x8BD5;&#x6848;&#x4F8B;&#x90FD;&#x4F1A;&#x4EE5;&#x76F8;&#x540C;&#x5F97;&#x987A;&#x5E8F;&#x6267;&#x884C;&#xFF0C;&#x56E0;&#x6B64;&#x540E;&#x9762;&#x53EF;&#x4EE5;&#x91CD;&#x590D;&#x6784;&#x5EFA;&#x3002;</p>
+<p>&#x5C3D;&#x7BA1;&#x771F;&#x6B63;&#x5F97;&#x5355;&#x5143;&#x6D4B;&#x8BD5;&#x4E0D;&#x5E94;&#x8BE5;&#x4F9D;&#x8D56;&#x4E8E;&#x4ED6;&#x4EEC;&#x5F97;&#x6267;&#x884C;&#x987A;&#x5E8F;&#xFF0C;&#x4F46;&#x6709;&#x7684;&#x65F6;&#x5019;&#x8FD8;&#x5FC5;&#x987B;&#x4FDD;&#x8BC1;&#x5B83;&#x4EEC;&#x4EE5;&#x67D0;&#x79CD;&#x6267;&#x884C;&#x987A;&#x5E8F;&#x6267;&#x884C;&#x3002;&#x6BD4;&#x5982;&#xFF0C;&#x5728;&#x7F16;&#x5199;&#x96C6;&#x6210;&#x6D4B;&#x8BD5;&#x6216;&#x8005;&#x529F;&#x80FD;&#x6D4B;&#x8BD5;&#x5F97;&#x65F6;&#x5019;&#xFF0C;&#x6D4B;&#x8BD5;&#x5F97;&#x6267;&#x884C;&#x987A;&#x5E8F;&#x5C31;&#x975E;&#x5E38;&#x91CD;&#x8981;&#x4E86;&#xFF0C;&#x7279;&#x522B;&#x5728;&#x4E0E;<code>@TestInstance(Lifecycle.PER_CLASS)</code>&#x6CE8;&#x89E3;&#x4E00;&#x8D77;&#x4F7F;&#x7528;&#x3002;</p>
+<p>&#x4E3A;&#x4E86;&#x63A7;&#x5236;&#x6D4B;&#x8BD5;&#x65B9;&#x6CD5;&#x5F97;&#x6267;&#x884C;&#x987A;&#x5E8F;&#xFF0C;&#x9700;&#x8981;&#x5728;&#x4F60;&#x7684;&#x6D4B;&#x8BD5;&#x7C7B;&#x548C;&#x6D4B;&#x8BD5;&#x63A5;&#x53E3;&#x4E0A;&#x4F7F;&#x7528;<code>@TestMethodOrder</code>&#xFF0C;&#x7136;&#x540E;&#x6307;&#x660E;<code>MethodOrder</code>&#x6765;&#x5B9E;&#x73B0;&#x3002;&#x4F60;&#x53EF;&#x4EE5;&#x4F7F;&#x7528;&#x4F60;&#x81EA;&#x5B9A;&#x4E49;&#x5F97;<code>MethodOrder</code>&#x6216;&#x8005;&#x4F7F;&#x7528;&#x4E0B;&#x9762;&#x67D0;&#x4E2A;<code>MethodOrder</code>&#x5F97;&#x5B9E;&#x73B0;&#x3002;</p>
+<ul>
+<li><code>Alphanumeric</code>&#xFF1A;&#x6839;&#x636E;&#x6D4B;&#x8BD5;&#x65B9;&#x6CD5;&#x5F97;&#x540D;&#x79F0;&#x548C;&#x5F62;&#x5F0F;&#x53C2;&#x6570;&#x5217;&#x8868;&#x5F97;&#x5B57;&#x6BCD;&#x987A;&#x5E8F;&#x6765;&#x6392;&#x5E8F;&#x6D4B;&#x8BD5;&#x65B9;&#x6CD5;&#xFF1B;</li>
+<li><code>OrderAnnotation</code>&#xFF1A;&#x6309;&#x7167;<code>@Order</code>&#x6CE8;&#x89E3;&#x4E0A;&#x6307;&#x5B9A;&#x503C;&#x5F97;&#x5927;&#x5C0F;&#x6765;&#x6392;&#x5E8F;&#x6D4B;&#x8BD5;&#x65B9;&#x6CD5;&#xFF1B;</li>
+<li><code>Random</code>&#xFF1A;&#x652F;&#x6301;&#x4F7F;&#x7528;&#x81EA;&#x5B9A;&#x4E49;&#x5F97;&#x79CD;&#x5B50;&#x6765;&#x914D;&#x7F6E;&#x4F2A;&#x968F;&#x673A;&#x6765;&#x6392;&#x5E8F;&#x6D4B;&#x8BD5;&#x65B9;&#x6CD5;&#xFF1B;</li>
+</ul>
+<p>&#x4E0B;&#x9762;&#x5F97;&#x4F8B;&#x5B50;&#x5C31;&#x662F;&#x901A;&#x8FC7;<code>@Order</code>&#x6CE8;&#x89E3;&#x6765;&#x4FDD;&#x8BC1;&#x6D4B;&#x8BD5;&#x65B9;&#x6CD5;&#x5F97;&#x6267;&#x884C;&#x987A;&#x5E8F;&#x3002;</p>
+<pre><code class="lang-java"><span class="hljs-keyword">import</span> org.junit.jupiter.api.MethodOrderer.OrderAnnotation;
+<span class="hljs-keyword">import</span> org.junit.jupiter.api.Order;
 <span class="hljs-keyword">import</span> org.junit.jupiter.api.Test;
+<span class="hljs-keyword">import</span> org.junit.jupiter.api.TestMethodOrder;
 
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyFirstJUnitJupiterTests</span> </span>{
-
-    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Calculator calculator = <span class="hljs-keyword">new</span> Calculator();
+<span class="hljs-meta">@TestMethodOrder</span>(OrderAnnotation.class)
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">OrderedTestsDemo</span> </span>{
 
     <span class="hljs-meta">@Test</span>
-    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">addition</span><span class="hljs-params">()</span> </span>{
-        assertEquals(<span class="hljs-number">2</span>, calculator.add(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>));
+    <span class="hljs-meta">@Order</span>(<span class="hljs-number">1</span>)
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">nullValues</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// perform assertions against null values</span>
+    }
+
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-meta">@Order</span>(<span class="hljs-number">2</span>)
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">emptyValues</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// perform assertions against empty values</span>
+    }
+
+    <span class="hljs-meta">@Test</span>
+    <span class="hljs-meta">@Order</span>(<span class="hljs-number">3</span>)
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">validValues</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-comment">// perform assertions against valid values</span>
     }
 
 }
@@ -372,12 +394,12 @@
 
             
                 
-                <a href="../chapter1/1.0Overview.html" class="navigation navigation-prev " aria-label="Previous page: 概述">
+                <a href="2.8Tagging_and_Filtering.html" class="navigation navigation-prev " aria-label="Previous page: 标签和过滤">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
                 
-                <a href="2.1Annotations.html" class="navigation navigation-next " aria-label="Next page: 注解">
+                <a href="2.10Test_Instance_Lifecycle.html" class="navigation navigation-next " aria-label="Next page: 测试生命周期">
                     <i class="fa fa-angle-right"></i>
                 </a>
                 
@@ -388,7 +410,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"编写测试","level":"2.2","depth":1,"next":{"title":"注解","level":"2.2.1","depth":2,"path":"chapter2/2.1Annotations.md","ref":"./chapter2/2.1Annotations.md","articles":[]},"previous":{"title":"概述","level":"2.1","depth":1,"path":"chapter1/1.0Overview.md","ref":"./chapter1/1.0Overview.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/2.0Writing_Tests.md","mtime":"2019-12-04T08:20:16.718Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-08T15:24:54.511Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"测试执行顺序","level":"2.2.9","depth":2,"next":{"title":"测试生命周期","level":"2.2.10","depth":2,"path":"chapter2/2.10Test_Instance_Lifecycle.md","ref":"./chapter2/2.10Test_Instance_Lifecycle.md","articles":[]},"previous":{"title":"标签和过滤","level":"2.2.8","depth":2,"path":"chapter2/2.8Tagging_and_Filtering.md","ref":"./chapter2/2.8Tagging_and_Filtering.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/2.9Test_Execution_Order.md","mtime":"2019-12-05T06:59:29.211Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-08T15:24:54.511Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>

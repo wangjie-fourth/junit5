@@ -4,7 +4,7 @@
     <head>
         <meta charset="UTF-8">
         <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
-        <title>编写测试 · GitBook</title>
+        <title>嵌套测试 · GitBook</title>
         <meta http-equiv="X-UA-Compatible" content="IE=edge" />
         <meta name="description" content="">
         <meta name="generator" content="GitBook 3.2.3">
@@ -57,10 +57,8 @@
     <link rel="shortcut icon" href="../gitbook/images/favicon.ico" type="image/x-icon">
 
     
-    <link rel="next" href="2.1Annotations.html" />
     
-    
-    <link rel="prev" href="../chapter1/1.0Overview.html" />
+    <link rel="prev" href="2.10Test_Instance_Lifecycle.html" />
     
 
     </head>
@@ -122,7 +120,7 @@
             
         </li>
     
-        <li class="chapter active" data-level="2.2" data-path="2.0Writing_Tests.html">
+        <li class="chapter " data-level="2.2" data-path="2.0Writing_Tests.html">
             
                 <a href="2.0Writing_Tests.html">
             
@@ -266,7 +264,7 @@
             
         </li>
     
-        <li class="chapter " data-level="2.2.11" data-path="2.11Nested_Tests.html">
+        <li class="chapter active" data-level="2.2.11" data-path="2.11Nested_Tests.html">
             
                 <a href="2.11Nested_Tests.html">
             
@@ -314,7 +312,7 @@
     <!-- Title -->
     <h1>
         <i class="fa fa-circle-o-notch fa-spin"></i>
-        <a href=".." >编写测试</a>
+        <a href=".." >嵌套测试</a>
     </h1>
 </div>
 
@@ -329,22 +327,96 @@
     
                                 <section class="normal markdown-section">
                                 
-                                <p>&#x63A5;&#x4E0B;&#x6765;&#x7684;&#x6848;&#x4F8B;&#x5C06;&#x63D0;&#x4F9B;&#x4E86;&#x5728;<code>JUnit Jupiter</code>&#x5199;&#x6D4B;&#x8BD5;&#x7684;&#x57FA;&#x672C;&#x8981;&#x6C42;&#x3002;&#x8FD9;&#x7AE0;&#x7684;&#x5269;&#x4F59;&#x90E8;&#x5206;&#x5C06;&#x5728;&#x6240;&#x6709;&#x53EF;&#x7528;&#x7684;&#x5206;&#x652F;&#x4E0A;&#x63D0;&#x4F9B;&#x66F4;&#x52A0;&#x8BE6;&#x7EC6;&#x7684;&#x7EC6;&#x8282;&#x3002;</p>
+                                <h3 id="211&#x3001;&#x5D4C;&#x5957;&#x6D4B;&#x8BD5;">2.11&#x3001;&#x5D4C;&#x5957;&#x6D4B;&#x8BD5;</h3>
+<p><code>@Nested</code>&#x6D4B;&#x8BD5;&#x8BA9;&#x6D4B;&#x8BD5;&#x7F16;&#x5199;&#x4EBA;&#x5458;&#x80FD;&#x591F;&#x66F4;&#x591A;&#x5F97;&#x8868;&#x8FF0;&#x51FA;&#x51E0;&#x4E2A;&#x6D4B;&#x8BD5;&#x7EC4;&#x4E4B;&#x524D;&#x5F97;&#x5173;&#x7CFB;&#x3002;&#x4E0B;&#x9762;&#x662F;&#x4E00;&#x4E2A;&#x8BE6;&#x7EC6;&#x5F97;&#x4F8B;&#x5B50;&#x3002;</p>
 <pre><code class="lang-java"><span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.junit.jupiter.api.Assertions.assertEquals;
-<span class="hljs-keyword">import</span> example.util.Calculator;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.junit.jupiter.api.Assertions.assertFalse;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.junit.jupiter.api.Assertions.assertThrows;
+<span class="hljs-keyword">import</span> <span class="hljs-keyword">static</span> org.junit.jupiter.api.Assertions.assertTrue;
+
+<span class="hljs-keyword">import</span> java.util.EmptyStackException;
+<span class="hljs-keyword">import</span> java.util.Stack;
+
+<span class="hljs-keyword">import</span> org.junit.jupiter.api.BeforeEach;
+<span class="hljs-keyword">import</span> org.junit.jupiter.api.DisplayName;
+<span class="hljs-keyword">import</span> org.junit.jupiter.api.Nested;
 <span class="hljs-keyword">import</span> org.junit.jupiter.api.Test;
 
-<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">MyFirstJUnitJupiterTests</span> </span>{
+<span class="hljs-meta">@DisplayName</span>(<span class="hljs-string">&quot;A stack&quot;</span>)
+<span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">TestingAStackDemo</span> </span>{
 
-    <span class="hljs-keyword">private</span> <span class="hljs-keyword">final</span> Calculator calculator = <span class="hljs-keyword">new</span> Calculator();
+    Stack&lt;Object&gt; stack;
 
     <span class="hljs-meta">@Test</span>
-    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">addition</span><span class="hljs-params">()</span> </span>{
-        assertEquals(<span class="hljs-number">2</span>, calculator.add(<span class="hljs-number">1</span>, <span class="hljs-number">1</span>));
+    <span class="hljs-meta">@DisplayName</span>(<span class="hljs-string">&quot;is instantiated with new Stack()&quot;</span>)
+    <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">isInstantiatedWithNew</span><span class="hljs-params">()</span> </span>{
+        <span class="hljs-keyword">new</span> Stack&lt;&gt;();
     }
 
+    <span class="hljs-meta">@Nested</span>
+    <span class="hljs-meta">@DisplayName</span>(<span class="hljs-string">&quot;when new&quot;</span>)
+    <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">WhenNew</span> </span>{
+
+        <span class="hljs-meta">@BeforeEach</span>
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">createNewStack</span><span class="hljs-params">()</span> </span>{
+            stack = <span class="hljs-keyword">new</span> Stack&lt;&gt;();
+        }
+
+        <span class="hljs-meta">@Test</span>
+        <span class="hljs-meta">@DisplayName</span>(<span class="hljs-string">&quot;is empty&quot;</span>)
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">isEmpty</span><span class="hljs-params">()</span> </span>{
+            assertTrue(stack.isEmpty());
+        }
+
+        <span class="hljs-meta">@Test</span>
+        <span class="hljs-meta">@DisplayName</span>(<span class="hljs-string">&quot;throws EmptyStackException when popped&quot;</span>)
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">throwsExceptionWhenPopped</span><span class="hljs-params">()</span> </span>{
+            assertThrows(EmptyStackException.class, stack::pop);
+        }
+
+        <span class="hljs-meta">@Test</span>
+        <span class="hljs-meta">@DisplayName</span>(<span class="hljs-string">&quot;throws EmptyStackException when peeked&quot;</span>)
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">throwsExceptionWhenPeeked</span><span class="hljs-params">()</span> </span>{
+            assertThrows(EmptyStackException.class, stack::peek);
+        }
+
+        <span class="hljs-meta">@Nested</span>
+        <span class="hljs-meta">@DisplayName</span>(<span class="hljs-string">&quot;after pushing an element&quot;</span>)
+        <span class="hljs-class"><span class="hljs-keyword">class</span> <span class="hljs-title">AfterPushing</span> </span>{
+
+            String anElement = <span class="hljs-string">&quot;an element&quot;</span>;
+
+            <span class="hljs-meta">@BeforeEach</span>
+            <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">pushAnElement</span><span class="hljs-params">()</span> </span>{
+                stack.push(anElement);
+            }
+
+            <span class="hljs-meta">@Test</span>
+            <span class="hljs-meta">@DisplayName</span>(<span class="hljs-string">&quot;it is no longer empty&quot;</span>)
+            <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">isNotEmpty</span><span class="hljs-params">()</span> </span>{
+                assertFalse(stack.isEmpty());
+            }
+
+            <span class="hljs-meta">@Test</span>
+            <span class="hljs-meta">@DisplayName</span>(<span class="hljs-string">&quot;returns the element when popped and is empty&quot;</span>)
+            <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">returnElementWhenPopped</span><span class="hljs-params">()</span> </span>{
+                assertEquals(anElement, stack.pop());
+                assertTrue(stack.isEmpty());
+            }
+
+            <span class="hljs-meta">@Test</span>
+            <span class="hljs-meta">@DisplayName</span>(<span class="hljs-string">&quot;returns the element when peeked but remains not empty&quot;</span>)
+            <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">returnElementWhenPeeked</span><span class="hljs-params">()</span> </span>{
+                assertEquals(anElement, stack.peek());
+                assertFalse(stack.isEmpty());
+            }
+        }
+    }
 }
 </code></pre>
+<blockquote>
+<p>&#x5185;&#x90E8;&#x7C7B;&#x4E2D;&#x53EA;&#x6709;&#x975E;&#x9759;&#x6001;&#x5185;&#x90E8;&#x7C7B;&#x624D;&#x53EF;&#x4EE5;&#x4F5C;&#x4E3A;<code>@Nested</code>&#x6D4B;&#x8BD5;&#x7C7B;&#x3002;&#x5D4C;&#x5957;&#x53EF;&#x4EE5;&#x662F;&#x4EFB;&#x610F;&#x6DF1;&#x5EA6;&#x7684;&#xFF0C;&#x8FD9;&#x4E9B;&#x5185;&#x90E8;&#x7C7B;&#x88AB;&#x8BA4;&#x4E3A;&#x662F;&#x6D4B;&#x8BD5;&#x7C7B;&#x5BB6;&#x65CF;&#x7684;&#x5B8C;&#x6574;&#x6210;&#x5458;&#xFF0C;&#x53EA;&#x6709;&#x4E00;&#x4E2A;&#x4F8B;&#x5916;&#xFF1A;<code>@BeforeAll</code>&#x548C;<code>@AfterAll</code>&#x9ED8;&#x8BA4;&#x60C5;&#x51B5;&#x4E0B;&#x4E0D;&#x751F;&#x6548;&#x3002;&#x539F;&#x56E0;&#x662F;<code>Java</code>&#x5728;&#x975E;&#x9759;&#x6001;&#x5185;&#x90E8;&#x7C7B;&#x4E2D;&#x4E0D;&#x5141;&#x8BB8;&#x6709;&#x9759;&#x6001;&#x6210;&#x5458;&#x3002;&#x4F46;&#x662F;&#x8FD9;&#x4E2A;&#x9650;&#x5236;&#x53EF;&#x4EE5;&#x901A;&#x8FC7;&#x4F7F;&#x7528;<code>@Nested</code>&#x548C;<code>@TestInstance(Lifecycle.PER_CLASS)</code>&#x6765;&#x907F;&#x514D;&#x3002;</p>
+</blockquote>
 
                                 
                                 </section>
@@ -372,14 +444,10 @@
 
             
                 
-                <a href="../chapter1/1.0Overview.html" class="navigation navigation-prev " aria-label="Previous page: 概述">
+                <a href="2.10Test_Instance_Lifecycle.html" class="navigation navigation-prev navigation-unique" aria-label="Previous page: 测试生命周期">
                     <i class="fa fa-angle-left"></i>
                 </a>
                 
-                
-                <a href="2.1Annotations.html" class="navigation navigation-next " aria-label="Next page: 注解">
-                    <i class="fa fa-angle-right"></i>
-                </a>
                 
             
         
@@ -388,7 +456,7 @@
     <script>
         var gitbook = gitbook || [];
         gitbook.push(function() {
-            gitbook.page.hasChanged({"page":{"title":"编写测试","level":"2.2","depth":1,"next":{"title":"注解","level":"2.2.1","depth":2,"path":"chapter2/2.1Annotations.md","ref":"./chapter2/2.1Annotations.md","articles":[]},"previous":{"title":"概述","level":"2.1","depth":1,"path":"chapter1/1.0Overview.md","ref":"./chapter1/1.0Overview.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/2.0Writing_Tests.md","mtime":"2019-12-04T08:20:16.718Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-08T15:24:54.511Z"},"basePath":"..","book":{"language":""}});
+            gitbook.page.hasChanged({"page":{"title":"嵌套测试","level":"2.2.11","depth":2,"previous":{"title":"测试生命周期","level":"2.2.10","depth":2,"path":"chapter2/2.10Test_Instance_Lifecycle.md","ref":"./chapter2/2.10Test_Instance_Lifecycle.md","articles":[]},"dir":"ltr"},"config":{"gitbook":"*","theme":"default","variables":{},"plugins":["livereload"],"pluginsConfig":{"livereload":{},"highlight":{},"search":{},"lunr":{"maxIndexSize":1000000,"ignoreSpecialCharacters":false},"sharing":{"facebook":true,"twitter":true,"google":false,"weibo":false,"instapaper":false,"vk":false,"all":["facebook","google","twitter","weibo","instapaper"]},"fontsettings":{"theme":"white","family":"sans","size":2},"theme-default":{"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"},"showLevel":false}},"structure":{"langs":"LANGS.md","readme":"README.md","glossary":"GLOSSARY.md","summary":"SUMMARY.md"},"pdf":{"pageNumbers":true,"fontSize":12,"fontFamily":"Arial","paperSize":"a4","chapterMark":"pagebreak","pageBreaksBefore":"/","margin":{"right":62,"left":62,"top":56,"bottom":56}},"styles":{"website":"styles/website.css","pdf":"styles/pdf.css","epub":"styles/epub.css","mobi":"styles/mobi.css","ebook":"styles/ebook.css","print":"styles/print.css"}},"file":{"path":"chapter2/2.11Nested_Tests.md","mtime":"2019-12-06T06:37:58.474Z","type":"markdown"},"gitbook":{"version":"3.2.3","time":"2019-12-08T15:24:54.511Z"},"basePath":"..","book":{"language":""}});
         });
     </script>
 </div>
